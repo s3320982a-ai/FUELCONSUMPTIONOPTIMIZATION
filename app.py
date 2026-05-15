@@ -97,30 +97,111 @@ st.set_page_config(page_title="GoldenTune AI: Optimization Suite", page_icon="�
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@700;800&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
     .stApp { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #f8fafc; }
+    
+    /* Structural & Stylistic rules from reference: Large radius, generous padding, flat depth, airy composition */
     .glass-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 40px; /* Soft modern corners */
+        padding: 50px; /* Generous internal padding */
+        margin-bottom: 60px; /* Airy spacing between sections */
+        box-shadow: none; /* Flat depth */
+        transition: border-color 0.3s ease;
     }
-    h1, h2, h3 {
+    
+    .glass-card:hover {
+        border-color: rgba(56, 189, 248, 0.4);
+    }
+    
+    /* Highlighted card variant */
+    .glass-card-highlight {
+        background: linear-gradient(145deg, rgba(56, 189, 248, 0.1) 0%, rgba(129, 140, 248, 0.05) 100%);
+        border: 2px solid rgba(56, 189, 248, 0.6);
+    }
+
+    h1, h2 {
+        font-family: 'Space Grotesk', sans-serif;
         background: -webkit-linear-gradient(45deg, #38bdf8, #818cf8);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 800;
+        letter-spacing: -1px;
     }
-    .metric-value { font-size: 2rem; font-weight: 800; color: #10b981; }
-    .metric-value-bad { font-size: 2rem; font-weight: 800; color: #ef4444; }
-    .metric-label { color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-    .stButton>button { border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+    
+    /* Specific Typography Hierarchy */
+    .section-header {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        color: #94a3b8;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    
+    .card-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #f8fafc;
+        margin-bottom: 5px;
+        line-height: 1.2;
+    }
+    
+    .sub-tagline {
+        font-size: 1rem;
+        color: #94a3b8;
+        font-style: italic;
+        margin-bottom: 30px;
+        display: block;
+        font-weight: 300;
+    }
+
+    .metric-value { font-size: 4rem; font-family: 'Space Grotesk', sans-serif; font-weight: 800; color: #10b981; line-height: 1; margin-top: 20px; }
+    .metric-value-bad { font-size: 4rem; font-family: 'Space Grotesk', sans-serif; font-weight: 800; color: #ef4444; line-height: 1; margin-top: 20px; }
+    .metric-label { color: #94a3b8; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+    
+    /* Pill-shaped buttons with hover effects */
+    div[data-testid="stButton"] > button, .stButton>button { 
+        border-radius: 50px !important; 
+        font-weight: 600; 
+        font-size: 1.1rem;
+        padding: 12px 32px;
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+    }
+    
+    div[data-testid="stButton"] > button:hover, .stButton>button:hover {
+        border-color: #38bdf8;
+        background: rgba(56, 189, 248, 0.05);
+        transform: translateY(-2px);
+    }
+    
+    /* Primary buttons */
+    div[data-testid="stButton"] > button[kind="primary"], .stButton>button[kind="primary"] {
+        background: #38bdf8 !important;
+        color: #0f172a !important;
+        border: none !important;
+        font-weight: 800 !important;
+    }
+    
+    div[data-testid="stButton"] > button[kind="primary"]:hover, .stButton>button[kind="primary"]:hover {
+        background: #0ea5e9 !important;
+        transform: translateY(-2px) scale(1.02);
+    }
+
     .math-step { font-size: 1.1rem; margin-bottom: 10px; color: #cbd5e1; }
+    
+    /* Feature lists from reference */
+    .feature-list { list-style: none; padding-left: 0; margin-top: 20px; }
+    .feature-list li { position: relative; padding-left: 35px; margin-bottom: 20px; font-weight: 600; font-size: 1.1rem; color: #e2e8f0; }
+    .feature-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 14px; height: 14px; background-color: #38bdf8; border-radius: 50%; }
+    .feature-desc { font-size: 0.9rem; color: #64748b; font-weight: 400; display: block; margin-top: 5px; line-height: 1.5; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -135,56 +216,40 @@ if st.session_state.current_page == "Menu":
     
     st.markdown("""
     <style>
-    /* Make buttons massive, premium and login-screen style */
+    /* Make buttons massive, airy and card-like following structural rules */
     div.stButton > button {
-        min-height: 380px !important;
+        min-height: 400px !important;
         height: 100% !important;
-        border-radius: 28px !important;
-        background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
-        border: 2px solid rgba(56, 189, 248, 0.2) !important;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+        border-radius: 40px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        transition: all 0.3s ease !important;
+        box-shadow: none !important; /* Flat depth */
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
         align-items: center !important;
         position: relative !important;
         overflow: hidden !important;
-    }
-    
-    /* Add a subtle aesthetic slash overlay effect */
-    div.stButton > button::before {
-        content: '' !important;
-        position: absolute !important;
-        top: -50% !important;
-        left: -50% !important;
-        width: 200% !important;
-        height: 200% !important;
-        background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.02) 50%, transparent 55%) !important;
-        transform: rotate(15deg) !important;
-        transition: all 0.6s ease !important;
-    }
-    
-    div.stButton > button:hover::before {
-        transform: rotate(15deg) translate(20%, 20%) !important;
+        padding: 50px !important;
     }
     
     div.stButton > button:hover {
-        background: linear-gradient(145deg, rgba(56, 189, 248, 0.15) 0%, rgba(129, 140, 248, 0.1) 100%) !important;
-        border-color: rgba(129, 140, 248, 0.8) !important;
-        transform: translateY(-15px) scale(1.02) !important;
-        box-shadow: 0 30px 60px rgba(56, 189, 248, 0.3), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+        background: rgba(56, 189, 248, 0.05) !important;
+        border-color: rgba(56, 189, 248, 0.4) !important;
+        transform: translateY(-5px) !important; /* Subtle hover stability */
     }
     
     div.stButton > button p {
-        font-size: 2.8rem !important;
+        font-family: 'Space Grotesk', sans-serif !important;
+        font-size: 2.5rem !important;
         font-weight: 800 !important;
-        background: -webkit-linear-gradient(45deg, #ffffff, #bae6fd) !important;
-        -webkit-background-clip: text !important;
-        -webkit-text-fill-color: transparent !important;
+        color: #f8fafc !important;
         white-space: pre-wrap !important;
-        line-height: 1.4 !important;
-        text-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
+        line-height: 1.2 !important;
+        background: none !important;
+        -webkit-text-fill-color: #f8fafc !important;
+        text-shadow: none !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -262,7 +327,8 @@ elif st.session_state.current_page == "Fuel":
 
     st.markdown("""
     <div class="glass-card">
-        <h4 style="margin-top: 0; color: #38bdf8;">⚙️ Configuration Panel</h4>
+        <div class="card-title">Configuration Panel</div>
+        <span class="sub-tagline">Set your vehicle physics and trip parameters below</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -329,16 +395,16 @@ elif st.session_state.current_page == "Fuel":
         fuel_saved = max(0, m_fuel - o_fuel)
         saving_pct = (fuel_saved / m_fuel) * 100 if m_fuel > 0 else 0
         
-        st.markdown("## Optimization Results")
+        st.markdown("<div class='section-header'>Optimization Results</div>", unsafe_allow_html=True)
         r1, r2, r3, r4 = st.columns(4)
         with r1:
-            st.markdown(f'<div class="glass-card" style="text-align: center;"><div class="metric-label">Optimal Speed</div><div class="metric-value">{o_speed:.1f} <span style="font-size: 1rem; color: white;">km/h</span></div></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="glass-card glass-card-highlight"><div class="metric-label">Optimal Speed</div><div class="metric-value">{o_speed:.1f} <span style="font-size: 1.5rem; color: #94a3b8;">km/h</span></div></div>', unsafe_allow_html=True)
         with r2:
-            st.markdown(f'<div class="glass-card" style="text-align: center;"><div class="metric-label">Total Energy Used</div><div class="metric-value">{o_fuel:.1f} <span style="font-size: 1rem; color: white;">{fuel_unit}</span></div></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="glass-card"><div class="metric-label">Total Energy Used</div><div class="metric-value">{o_fuel:.1f} <span style="font-size: 1.5rem; color: #94a3b8;">{fuel_unit}</span></div></div>', unsafe_allow_html=True)
         with r3:
-            st.markdown(f'<div class="glass-card" style="text-align: center;"><div class="metric-label">Energy Saved</div><div class="metric-value">{fuel_saved:.1f} {fuel_unit} <span style="font-size: 1rem; color: white;">({saving_pct:.1f}%)</span></div></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="glass-card"><div class="metric-label">Energy Saved</div><div class="metric-value">{fuel_saved:.1f} {fuel_unit} <span style="font-size: 1rem; color: #94a3b8;"><br>({saving_pct:.1f}%)</span></div></div>', unsafe_allow_html=True)
         with r4:
-            st.markdown(f'<div class="glass-card" style="text-align: center;"><div class="metric-label">Money Saved</div><div class="metric-value">${(fuel_saved * fuel_price):.2f}</div></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="glass-card"><div class="metric-label">Money Saved</div><div class="metric-value">${(fuel_saved * fuel_price):.2f}</div></div>', unsafe_allow_html=True)
 
         v_vals = np.linspace(speed_min, speed_max, 300)
         f_vals = [get_trip_fuel(v) for v in v_vals]
@@ -376,7 +442,8 @@ elif st.session_state.current_page == "GSS":
 
     st.markdown("""
     <div class="glass-card">
-        <h4 style="margin-top: 0; color: #38bdf8;">🧮 GSS Parameters</h4>
+        <div class="card-title">GSS Parameters</div>
+        <span class="sub-tagline">Define your mathematical function and bounds</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -420,7 +487,8 @@ elif st.session_state.current_page == "GSS":
             for i in range(1, num_iters + 1):
                 st.markdown(f"""
                 <div class="glass-card">
-                    <h3 style="margin-top: 0; color: #38bdf8;">Iteration {i}</h3>
+                    <div class="card-title">Iteration {i}</div>
+                    <span class="sub-tagline">Calculating optimal bracket points</span>
                 """, unsafe_allow_html=True)
                 
                 d = R * (xu - xl)
