@@ -97,57 +97,77 @@ st.set_page_config(page_title="GoldenTune AI: Optimization Suite", page_icon="�
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    .stApp { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); color: #f8fafc; }
     
-    /* Structural & Stylistic rules from reference: Large radius, generous padding, flat depth, airy composition */
+    .stApp { 
+        background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=3540&auto=format&fit=crop');
+        background-size: cover; 
+        background-position: center;
+        background-attachment: fixed;
+        color: #f8fafc; 
+    }
+    
+    .stApp::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15, 23, 42, 0.35);
+        pointer-events: none;
+        z-index: 0;
+    }
+    
+    .block-container {
+        position: relative;
+        z-index: 1;
+        padding-top: 1rem !important;
+    }
+    
+    /* Structural & Stylistic rules */
     .glass-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        border-radius: 40px; /* Soft modern corners */
-        padding: 50px; /* Generous internal padding */
-        margin-bottom: 60px; /* Airy spacing between sections */
-        box-shadow: none; /* Flat depth */
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px; 
+        padding: 40px; 
+        margin-bottom: 40px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         transition: border-color 0.3s ease;
     }
     
     .glass-card:hover {
-        border-color: rgba(56, 189, 248, 0.4);
+        border-color: rgba(196, 217, 148, 0.4);
     }
     
-    /* Highlighted card variant */
     .glass-card-highlight {
-        background: linear-gradient(145deg, rgba(56, 189, 248, 0.1) 0%, rgba(129, 140, 248, 0.05) 100%);
-        border: 2px solid rgba(56, 189, 248, 0.6);
+        background: linear-gradient(145deg, rgba(196, 217, 148, 0.1) 0%, rgba(15, 23, 42, 0.4) 100%);
+        border: 1px solid rgba(196, 217, 148, 0.5);
     }
 
     h1, h2 {
-        font-family: 'Space Grotesk', sans-serif;
-        background: -webkit-linear-gradient(45deg, #38bdf8, #818cf8);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 800;
+        font-family: 'Inter', sans-serif;
+        color: #fff;
+        font-weight: 500;
         letter-spacing: -1px;
     }
     
     /* Specific Typography Hierarchy */
     .section-header {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.2rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 1.1rem;
         text-transform: uppercase;
-        letter-spacing: 4px;
-        color: #94a3b8;
-        margin-bottom: 10px;
+        letter-spacing: 3px;
+        color: #cbd5e1;
+        margin-bottom: 15px;
         text-align: center;
+        font-weight: 500;
     }
     
     .card-title {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 2.5rem;
-        font-weight: 800;
+        font-family: 'Inter', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 500;
         color: #f8fafc;
         margin-bottom: 5px;
         line-height: 1.2;
@@ -155,53 +175,54 @@ st.markdown("""
     
     .sub-tagline {
         font-size: 1rem;
-        color: #94a3b8;
-        font-style: italic;
+        color: #cbd5e1;
         margin-bottom: 30px;
         display: block;
         font-weight: 300;
     }
 
-    .metric-value { font-size: 4rem; font-family: 'Space Grotesk', sans-serif; font-weight: 800; color: #10b981; line-height: 1; margin-top: 20px; }
-    .metric-value-bad { font-size: 4rem; font-family: 'Space Grotesk', sans-serif; font-weight: 800; color: #ef4444; line-height: 1; margin-top: 20px; }
-    .metric-label { color: #94a3b8; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+    .metric-value { font-size: 3.5rem; font-family: 'Inter', sans-serif; font-weight: 500; color: #c4d994; line-height: 1; margin-top: 20px; }
+    .metric-value-bad { font-size: 3.5rem; font-family: 'Inter', sans-serif; font-weight: 500; color: #ef4444; line-height: 1; margin-top: 20px; }
+    .metric-label { color: #cbd5e1; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500; }
     
     /* Pill-shaped buttons with hover effects */
     div[data-testid="stButton"] > button, .stButton>button { 
         border-radius: 50px !important; 
-        font-weight: 600; 
+        font-weight: 500; 
         font-size: 1.1rem;
         padding: 12px 32px;
         border: 1px solid rgba(255,255,255,0.2);
         transition: all 0.3s ease;
+        background: rgba(0,0,0,0.3);
+        color: #fff;
     }
     
     div[data-testid="stButton"] > button:hover, .stButton>button:hover {
-        border-color: #38bdf8;
-        background: rgba(56, 189, 248, 0.05);
+        border-color: #c4d994;
+        background: rgba(196, 217, 148, 0.1);
         transform: translateY(-2px);
     }
     
     /* Primary buttons */
     div[data-testid="stButton"] > button[kind="primary"], .stButton>button[kind="primary"] {
-        background: #38bdf8 !important;
-        color: #0f172a !important;
+        background: #c4d994 !important;
+        color: #1e293b !important;
         border: none !important;
-        font-weight: 800 !important;
+        font-weight: 500 !important;
     }
     
     div[data-testid="stButton"] > button[kind="primary"]:hover, .stButton>button[kind="primary"]:hover {
-        background: #0ea5e9 !important;
-        transform: translateY(-2px) scale(1.02);
+        background: #d4e8a3 !important;
+        transform: translateY(-2px);
     }
 
     .math-step { font-size: 1.1rem; margin-bottom: 10px; color: #cbd5e1; }
     
-    /* Feature lists from reference */
+    /* Feature lists */
     .feature-list { list-style: none; padding-left: 0; margin-top: 20px; }
-    .feature-list li { position: relative; padding-left: 35px; margin-bottom: 20px; font-weight: 600; font-size: 1.1rem; color: #e2e8f0; }
-    .feature-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 14px; height: 14px; background-color: #38bdf8; border-radius: 50%; }
-    .feature-desc { font-size: 0.9rem; color: #64748b; font-weight: 400; display: block; margin-top: 5px; line-height: 1.5; }
+    .feature-list li { position: relative; padding-left: 35px; margin-bottom: 20px; font-weight: 500; font-size: 1.1rem; color: #e2e8f0; }
+    .feature-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 14px; height: 14px; background-color: #c4d994; border-radius: 50%; }
+    .feature-desc { font-size: 0.9rem; color: #cbd5e1; font-weight: 300; display: block; margin-top: 5px; line-height: 1.5; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -211,62 +232,252 @@ if 'current_page' not in st.session_state:
 
 # --- MAIN MENU PAGE ---
 if st.session_state.current_page == "Menu":
-    st.markdown("<br><br><h1 style='text-align: center; font-size: 5rem;'>GoldenTune AI</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: #94a3b8; margin-bottom: 80px;'>Advanced Optimization Suite</h3>", unsafe_allow_html=True)
-    
     st.markdown("""
     <style>
-    /* Make buttons massive, airy and card-like following structural rules */
-    div.stButton > button {
-        min-height: 400px !important;
-        height: 100% !important;
+    /* Hide top padding and generic Streamlit header on Menu page */
+    .block-container {
+        padding-top: 0rem !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    header { visibility: hidden; }
+    
+    /* Top Navigation Bar */
+    .lumena-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px 60px;
+        background: transparent;
+        color: #f8fafc;
+        font-family: 'Inter', sans-serif;
+    }
+    .lumena-logo {
+        font-size: 1.2rem;
+        font-weight: 400;
+        letter-spacing: 3px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .lumena-logo span {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f8fafc;
+        border-radius: 50%;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        transform: rotate(45deg);
+    }
+    .lumena-links {
+        display: flex;
+        gap: 40px;
+        font-size: 0.95rem;
+        color: #cbd5e1;
+        font-weight: 400;
+    }
+    .lumena-links span { cursor: pointer; transition: color 0.3s; }
+    .lumena-links span:hover { color: #fff; }
+    .lumena-auth {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        font-size: 0.95rem;
+        font-weight: 400;
+    }
+    .lumena-auth .sign-in { cursor: pointer; color: #cbd5e1; transition: color 0.3s; }
+    .lumena-auth .sign-in:hover { color: #fff; }
+    .lumena-auth .get-started {
+        border: 1px solid rgba(255,255,255,0.4);
+        border-radius: 30px;
+        padding: 10px 24px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .lumena-auth .get-started:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    /* Hero Section */
+    .hero-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+        text-align: center;
+        padding: 0 20px;
+        margin-top: 20px;
+    }
+    .badge-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+    .badge {
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 30px;
+        padding: 8px 20px;
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+        color: #e2e8f0;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0,0,0,0.3);
+        backdrop-filter: blur(10px);
+        text-transform: uppercase;
+    }
+    .hero-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 5rem;
+        font-weight: 400;
+        color: #fff;
+        margin-bottom: 25px;
+        line-height: 1.1;
+        letter-spacing: -2px;
+    }
+    .hero-title .highlight {
+        color: #c4d994; /* Pale soft green from Lumena */
+        font-weight: 500;
+    }
+    .hero-subtitle {
+        color: #cbd5e1;
+        font-size: 1.25rem;
+        max-width: 650px;
+        line-height: 1.6;
+        margin-bottom: 40px;
+        font-weight: 300;
+    }
+    
+    /* Override Streamlit Buttons for Hero */
+    .stButton>button {
+        background: #c4d994 !important;
+        color: #1e293b !important;
+        border: none !important;
         border-radius: 40px !important;
-        background: rgba(255, 255, 255, 0.03) !important;
-        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        padding: 16px 32px !important;
+        font-size: 1.1rem !important;
+        font-weight: 500 !important;
         transition: all 0.3s ease !important;
-        box-shadow: none !important; /* Flat depth */
-        display: flex !important;
-        flex-direction: column !important;
+        box-shadow: none !important;
+        min-height: unset !important;
+        height: auto !important;
+        display: inline-flex !important;
         justify-content: center !important;
         align-items: center !important;
-        position: relative !important;
-        overflow: hidden !important;
-        padding: 50px !important;
+        margin: 0 auto;
+        width: 100% !important;
+    }
+    .stButton>button p {
+        font-family: 'Inter', sans-serif !important;
+        font-size: 1.05rem !important;
+        font-weight: 500 !important;
+        color: #1e293b !important;
+    }
+    .stButton>button:hover {
+        transform: translateY(-2px) !important;
+        background: #d4e8a3 !important;
+        box-shadow: 0 10px 25px rgba(196, 217, 148, 0.2) !important;
     }
     
-    div.stButton > button:hover {
-        background: rgba(56, 189, 248, 0.05) !important;
-        border-color: rgba(56, 189, 248, 0.4) !important;
-        transform: translateY(-5px) !important; /* Subtle hover stability */
+    .secondary-btn>div>div>button {
+        background: rgba(255,255,255,0.05) !important;
+        color: #fff !important;
+        border: 1px solid rgba(255,255,255,0.3) !important;
+        backdrop-filter: blur(10px);
     }
-    
-    div.stButton > button p {
-        font-family: 'Space Grotesk', sans-serif !important;
-        font-size: 2.5rem !important;
-        font-weight: 800 !important;
-        color: #f8fafc !important;
-        white-space: pre-wrap !important;
-        line-height: 1.2 !important;
-        background: none !important;
-        -webkit-text-fill-color: #f8fafc !important;
-        text-shadow: none !important;
+    .secondary-btn>div>div>button p {
+        color: #fff !important;
+    }
+    .secondary-btn>div>div>button:hover {
+        background: rgba(255,255,255,0.1) !important;
+        border: 1px solid rgba(255,255,255,0.5) !important;
+    }
+
+    /* Footer */
+    .trusted-by {
+        text-align: center;
+        color: #cbd5e1;
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-top: 60px;
+        font-weight: 600;
+        padding-bottom: 40px;
+    }
+    .trusted-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        margin-top: 25px;
+        opacity: 0.9;
+    }
+    .trusted-logos span {
+        font-weight: 600;
+        font-size: 1.3rem;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
     }
     </style>
+
+    <div class="lumena-nav">
+        <div class="lumena-logo"><span></span> GOLDENTUNE</div>
+        <div class="lumena-links">
+            <span>Features ⌄</span>
+            <span>Gallery</span>
+            <span>Pricing</span>
+            <span>API ⌄</span>
+            <span>Resources ⌄</span>
+        </div>
+        <div class="lumena-auth">
+            <span class="sign-in">Sign in</span>
+            <span class="get-started">Get Started</span>
+        </div>
+    </div>
+
+    <div class="hero-container">
+        <div class="badge-container">
+            <div class="badge">✦ OPTIMIZATION SUITE</div>
+        </div>
+        <div class="hero-title">Optimization becomes <span class="highlight">intuitive.</span></div>
+        <div class="hero-subtitle">
+            Simulate physics-based fuel consumption and explore Golden Section Search algorithms.<br>Fast, precise, and built for education.
+        </div>
+    </div>
     """, unsafe_allow_html=True)
     
-    col1, col_space, col2 = st.columns([10, 1, 10])
+    st.markdown("<div style='max-width: 600px; margin: 0 auto;'>", unsafe_allow_html=True)
+    col1, col2, col3, col4, col5 = st.columns([1, 0.5, 4, 4, 1])
     
-    with col1:
-        if st.button("🧮 Custom GSS Solver", use_container_width=True):
+    with col3:
+        if st.button("Start GSS Solver ➔", use_container_width=True):
             st.session_state.animating_to = "GSS"
             st.session_state.current_page = "Animation"
             st.rerun()
             
-    with col2:
-        if st.button("🏎️ Fuel Optimization System", use_container_width=True):
+    with col4:
+        st.markdown('<div class="secondary-btn">', unsafe_allow_html=True)
+        if st.button("Fuel System ➔", use_container_width=True):
             st.session_state.animating_to = "Fuel"
             st.session_state.current_page = "Animation"
             st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="trusted-by">
+        POWERED BY ALGORITHMS FOR
+        <div class="trusted-logos">
+            <span>OpenAI</span>
+            <span style="font-weight: 400;">Midjourney</span>
+            <span style="font-family: serif; font-style: italic; font-weight: bold; font-size: 1.5rem;">Adobe</span>
+            <span style="letter-spacing: -1px;">runway</span>
+            <span style="font-family: 'Brush Script MT', cursive; font-size: 1.8rem;">Canva</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- ANIMATION PAGE ---
 elif st.session_state.current_page == "Animation":
